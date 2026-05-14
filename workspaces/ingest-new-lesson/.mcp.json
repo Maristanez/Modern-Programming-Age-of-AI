@@ -1,0 +1,4 @@
+{
+  "$comment": "Layer 3 (workspace-scoped) MCP servers for the 'ingest a new lesson' workflow. Placeholder — add real servers (e.g. a web-fetch or video-transcript server) as needed. Servers listed here are intended to be used when working inside this folder.",
+  "mcpServers": {}
+}
