@@ -1,99 +1,146 @@
-# Lesson 1 — Folder System Architecture (the three-layer routing system)
-
-**Date:** 2026-05-13
-**Source:** Jake Van Clief — *"Stop Building AI Agents. Use This Folder System Instead"*
-**Type:** Organizational system / framework
+# Interpretable Context Methodology (ICM)
+### Folder Structure as Agentic Architecture
+*By Jake Van Clief — also called the Model Workspace Protocol (MWP)*
 
 ---
 
 ## TL;DR
 
-Instead of building bespoke "agents" with custom orchestration code, you organize your
-workspace into a **three-layer folder system** and let the AI navigate it:
+ICM replaces multi-agent frameworks and orchestration code with **filesystem structure**. Numbered folders encode the pipeline; plain markdown files carry the prompts, rules, and artifacts. **One agent** reads the right files at the right moment instead of many agents coordinating through a framework.
 
-1. **Global map** — a single root `CLAUDE.md` that describes the whole system and points
-   the AI to everything else.
-2. **Per-workspace context** — each working folder has its own `CLAUDE.md` with the task
-   guidance specific to that environment.
-3. **Skills & tools on demand** — skills (`.claude/skills/`) and MCP servers (`.mcp.json`)
-   live *inside* the workspace folder whose workflow needs them, so they're only loaded
-   when work is actually happening there.
+> If the prompts and context for each stage already exist as files in a well-organized folder hierarchy, you don't need multiple agents or a coordination framework — you need one agent that reads the right files at the right moment.
 
-Plus a naming convention: dated assets use `YYYY-MM-DD-title`, so things sort
-chronologically and can be moved or referenced without any backend or database. The
-folder structure *is* the routing logic.
+---
 
-## Why this instead of "agents"
+## Core Principles
 
-- **No orchestration code to maintain.** The "routing" is just the AI reading `CLAUDE.md`
-  files and walking the directory tree.
-- **Composable & portable.** Folders can be copied, moved, archived, or shared. A lesson
-  or workspace is self-contained.
-- **Context stays scoped.** Layer 3 (skills/MCP) only enters the picture when you're in
-  the relevant folder, so you don't pay context cost for tools you aren't using.
-- **Scales by accretion.** Adding capability = adding a folder + linking it from the map.
-  Nothing else has to change.
+1. **One stage, one job** — each folder handles a single workflow step (Unix philosophy).
+2. **Plain-text interface** — markdown and JSON only; no binary state, no hidden memory.
+3. **Layered context loading** — each stage loads only what it needs.
+4. **Every output is editable** — humans can inspect and modify artifacts between stages.
+5. **Configure the factory, not the product** — set rules once in `_config/`, reuse across runs.
 
-## The three layers in detail
+---
 
-### Layer 1 — Global map (`/CLAUDE.md`)
+## The Five-Layer Context Model
 
-The entry point. It should answer, for a fresh AI session:
+Agents read context top-down through five layers. Each layer answers a different question.
 
-- What is this repo / workspace?
-- What are the major areas (lessons, workspaces, projects)?
-- Where do I go for task X?
-- What conventions must I follow?
+| Layer | File / Location | Question Answered | Typical Tokens |
+|---|---|---|---|
+| **0 — Identity** | `CLAUDE.md` (root) | *Where am I?* | ~800 |
+| **1 — Routing** | `CONTEXT.md` (root) | *Where do I go?* | ~300 |
+| **2 — Stage Contract** | `NN_stage/CONTEXT.md` | *What do I do?* | 200–500 |
+| **3 — Reference** | `_config/`, `stage/references/` | *What rules apply?* | 500–2k |
+| **4 — Artifacts** | `stage/output/`, prior-stage outputs | *What am I working with?* | varies |
 
-Keep it a *map*, not a manual. It links outward; details live in Layer 2.
+**Total per stage:** ~2,000–8,000 tokens. Layer 3 is *internalized as constraints*; Layer 4 is *processed as input*.
 
-### Layer 2 — Per-workspace context (`workspaces/<name>/CLAUDE.md`)
+---
 
-Each workspace folder is an "environment" for a particular kind of work (e.g. ingesting a
-new lesson, drafting a blog post, doing research). Its `CLAUDE.md` holds:
+## Canonical Folder Structure
 
-- The goal of work done in this folder.
-- Step-by-step guidance / checklists for the recurring task.
-- Pointers to the Layer 3 skills/MCP in this folder and when to use them.
-- Output conventions (where results go, naming, etc.).
+```
+workspace/
+├── CLAUDE.md                    # Layer 0 — identity & workspace map
+├── CONTEXT.md                   # Layer 1 — stage routing, shared resources
+│
+├── _config/                     # Layer 3 — stable, workspace-wide rules
+│   ├── voice.md
+│   ├── design-system.md
+│   └── conventions.md
+│
+├── shared/                      # Layer 3 — cross-stage shared resources
+│   └── setup/
+│       └── questionnaire.md
+│
+├── 01_research/                 # Stage 1
+│   ├── CONTEXT.md               # Layer 2 — this stage's contract
+│   ├── references/              # Layer 3 — stage-scoped references
+│   └── output/                  # Layer 4 — artifacts produced here
+│
+├── 02_script/                   # Stage 2
+│   ├── CONTEXT.md
+│   ├── references/
+│   └── output/
+│
+└── 03_production/               # Stage 3
+    ├── CONTEXT.md
+    ├── references/
+    └── output/
+```
 
-### Layer 3 — Skills & MCP, invoked on demand (`workspaces/<name>/.claude/skills/`, `workspaces/<name>/.mcp.json`)
+### Naming Conventions
 
-The actual capabilities — reusable skills and external tool servers — nested inside the
-workspace that needs them. Because they're scoped to the folder:
+- **Stage folders** are numbered (`01_`, `02_`, `03_`) — the digits encode execution order so no orchestration code is needed.
+- **`references/`** inside a stage holds Layer 3 material scoped to that stage.
+- **`output/`** inside a stage is the handoff point — its files become the next stage's Layer 4 inputs.
+- **`_config/`** (leading underscore) holds workspace-wide Layer 3 reference material.
+- **`CONTEXT.md`** is the universal name for routing/contract files at each level.
 
-- They're discovered/loaded when the AI is operating in that folder.
-- Different workspaces can have different (even conflicting) tool setups.
-- You can optionally *also* register some at the project root if you want them
-  auto-discovered everywhere — a deliberate trade-off (convenience vs. scoped context).
+---
 
-## The naming convention
+## Stage Contract (Layer 2) Template
 
-`YYYY-MM-DD-title` (e.g. `2026-05-13-folder-system-architecture`):
+Every `NN_stage/CONTEXT.md` has three sections:
 
-- Sorts chronologically in any file browser.
-- Makes "what did I learn and when" trivially answerable.
-- Lets the AI move/rename/reference assets purely by path — no index, no DB, no backend.
+```markdown
+## Inputs
+- Layer 4 (working):   ../01_research/output/findings.md
+- Layer 3 (reference): ../_config/voice.md
+- Layer 3 (reference): references/structure.md
 
-## How this repo dogfoods it
+## Process
+Transform the research findings into a script that matches the tone
+defined in voice.md and the structural pattern in structure.md.
 
-| Layer | In this repo |
-|-------|--------------|
-| 1 — global map | [`/CLAUDE.md`](../../CLAUDE.md) |
-| 2 — per-workspace context | [`workspaces/ingest-new-lesson/CLAUDE.md`](../../workspaces/ingest-new-lesson/CLAUDE.md) |
-| 3 — skills / MCP on demand | [`workspaces/ingest-new-lesson/.claude/skills/lesson-intake/SKILL.md`](../../workspaces/ingest-new-lesson/.claude/skills/lesson-intake/SKILL.md), [`workspaces/ingest-new-lesson/.mcp.json`](../../workspaces/ingest-new-lesson/.mcp.json) |
-| naming | `lessons/YYYY-MM-DD-title/`, this folder being the first |
+## Outputs
+- script_draft.md -> output/
+```
 
-## Applying it to your own work
+The **Inputs** list makes context selection *explicit, editable, and auditable* — you can see exactly what an agent will load before it runs.
 
-1. Put a `CLAUDE.md` at the root that maps the territory.
-2. Make a folder per recurring kind of work; give each its own `CLAUDE.md`.
-3. Drop skills/MCP into the folder whose workflow uses them; promote to root only if you
-   genuinely want them everywhere.
-4. Date anything that's a point-in-time artifact with `YYYY-MM-DD-`.
-5. When you learn something new, it's a new dated folder + a link from the map — done.
+---
 
-## Open questions captured from the originating session
+## How Agents Run It
 
-- Should some Layer-3 skills/MCP also be registered at the **project root** for
-  auto-discovery, or kept strictly workspace-scoped? (Pending the user's decision.)
+- **Single Claude Code session** orchestrates the whole pipeline.
+- **Orchestrator** (e.g. Opus 4.6) walks the numbered stages and reads each `CONTEXT.md`.
+- **Sub-tasks within a stage** are delegated to faster models (e.g. Sonnet 4.6); the stage's `CONTEXT.md` *is* the sub-agent spec — no separate orchestration code.
+- **Human review gates** exist naturally at stage boundaries: inspect or edit `output/` before the next stage runs.
+
+---
+
+## Why This Works
+
+- **Observable by default** — every intermediate state is a plain file. No logging layer, no dashboard, no special tooling.
+- **Portable** — copy the folder to any machine; it works immediately.
+- **Version-controllable** — Git diffs every prompt, rule, and artifact.
+- **Non-technical-editable** — users have modified stage behavior (tone, constraints, ordering) by editing markdown alone, no code required.
+
+---
+
+## Bootstrapping a New Workspace
+
+1. Clone the ICM repo.
+2. Navigate to a workspace (e.g. `script-to-animation`, `course-deck-production`, or `workspace-builder` to scaffold a new one).
+3. Open Claude Code in that directory.
+4. Type `setup` and answer the `shared/setup/questionnaire.md` prompts.
+5. Walk through the numbered stages sequentially.
+
+---
+
+## When *Not* to Use ICM
+
+- Real-time multi-agent collaboration.
+- High-concurrency systems.
+- Complex automated branching logic (ICM is linear-by-design).
+
+---
+
+## References
+
+- Paper: [arxiv.org/abs/2603.16021](https://arxiv.org/abs/2603.16021) — *Interpretable Context Methodology: Folder Structure as Agentic Architecture*
+- Repo: [github.com/RinDig/Interpreted-Context-Methdology](https://github.com/RinDig/Interpreted-Context-Methdology)
+- Video: [Stop Building AI Agents. Use This Folder System Instead.](https://www.youtube.com/watch?v=MkN-ss2Nl10)
+- Community: [Clief Notes — Skool](https://www.skool.com/quantum-quill-lyceum-1116)
