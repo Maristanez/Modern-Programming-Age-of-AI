@@ -26,9 +26,11 @@ This repo dogfoods the three-layer routing system from Lesson 1:
 ├── docs/
 │   └── plan.md                     # the originating project plan
 ├── lessons/
-│   └── YYYY-MM-DD-title/           # one folder per lesson, dated
-│       ├── README.md               # the write-up (entry point)
-│       └── *.md                    # optional companion docs the lesson references
+│   ├── <category>/                 # optional category subfolder (e.g. ui-ux/)
+│   │   └── YYYY-MM-DD-title/       # one folder per lesson, dated
+│   │       ├── README.md           # the write-up (entry point)
+│   │       └── *.md                # optional companion docs the lesson references
+│   └── YYYY-MM-DD-title/           # uncategorized lessons live at the top level
 └── workspaces/
     └── <workspace-name>/
         ├── CLAUDE.md               # Layer 2: task guidance for this workspace
@@ -41,11 +43,14 @@ This repo dogfoods the three-layer routing system from Lesson 1:
 | Date | Lesson | Source |
 |------|--------|--------|
 | 2026-05-13 | [Folder System Architecture](./lessons/2026-05-13-folder-system-architecture/README.md) | Jake Van Clief — "Stop Building AI Agents. Use This Folder System Instead" |
-| 2026-05-26 | [Figma MCP Design Pipeline](./lessons/2026-05-26-figma-mcp-design-pipeline/README.md) | Companion docs — *Design-to-Code Pipeline* + *Refactoring a "Slop" Codebase with the Figma MCP* |
+| 2026-05-26 | [Design-to-Code Pipelines (Figma MCP + Claude Design)](./lessons/ui-ux/2026-05-26-figma-mcp-design-pipeline/README.md) | Companion docs — *Design-to-Code Pipeline*, *Refactoring a "Slop" Codebase with the Figma MCP*, and *The Claude Design Pipeline* |
 
 ## Adding a new lesson
 
-1. Create `lessons/YYYY-MM-DD-short-title/README.md` with the write-up.
+1. Create `lessons/YYYY-MM-DD-short-title/README.md` (or
+   `lessons/<category>/YYYY-MM-DD-short-title/README.md` if the lesson fits an
+   existing theme like `ui-ux/`) with the write-up. Companion `*.md` docs can sit
+   alongside `README.md` in the same folder.
 2. Add a row to the table above.
 3. If the lesson implies a repeatable workflow, scaffold a folder under `workspaces/`
    with its own `CLAUDE.md` (Layer 2) and any skills / `.mcp.json` it needs (Layer 3).

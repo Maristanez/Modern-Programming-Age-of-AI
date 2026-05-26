@@ -26,9 +26,14 @@ and can be moved/referenced without a backend.
 - `lessons/2026-05-13-folder-system-architecture/` — the three-layer routing system
   from Jake Van Clief's video "Stop Building AI Agents. Use This Folder System Instead".
   Start here to understand why the repo is shaped the way it is.
-- `lessons/2026-05-26-figma-mcp-design-pipeline/` — the Dribbble → Figma → MCP → Claude
-  Code pipeline for design-to-code, plus its companion refactor playbook for applying
-  the same pipeline to an existing "slop" codebase without breaking business logic.
+- `lessons/ui-ux/2026-05-26-figma-mcp-design-pipeline/` — design-to-code pipelines:
+  the Dribbble → Figma → MCP → Claude Code path, the native claude.ai/design →
+  Handoff path, and the brownfield refactor discipline that applies to both when
+  redesigning an existing "slop" codebase without breaking business logic.
+
+Lessons can be grouped under category subfolders (e.g. `lessons/ui-ux/`) when a
+theme accumulates enough material; uncategorized lessons live directly under
+`lessons/`.
 
 ## Workspaces
 
