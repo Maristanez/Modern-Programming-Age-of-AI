@@ -27,7 +27,8 @@ This repo dogfoods the three-layer routing system from Lesson 1:
 │   └── plan.md                     # the originating project plan
 ├── lessons/
 │   └── YYYY-MM-DD-title/           # one folder per lesson, dated
-│       └── README.md               # the write-up
+│       ├── README.md               # the write-up (entry point)
+│       └── *.md                    # optional companion docs the lesson references
 └── workspaces/
     └── <workspace-name>/
         ├── CLAUDE.md               # Layer 2: task guidance for this workspace
@@ -40,6 +41,7 @@ This repo dogfoods the three-layer routing system from Lesson 1:
 | Date | Lesson | Source |
 |------|--------|--------|
 | 2026-05-13 | [Folder System Architecture](./lessons/2026-05-13-folder-system-architecture/README.md) | Jake Van Clief — "Stop Building AI Agents. Use This Folder System Instead" |
+| 2026-05-26 | [Figma MCP Design Pipeline](./lessons/2026-05-26-figma-mcp-design-pipeline/README.md) | Companion docs — *Design-to-Code Pipeline* + *Refactoring a "Slop" Codebase with the Figma MCP* |
 
 ## Adding a new lesson
 

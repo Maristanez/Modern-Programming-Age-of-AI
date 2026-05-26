@@ -26,6 +26,9 @@ and can be moved/referenced without a backend.
 - `lessons/2026-05-13-folder-system-architecture/` — the three-layer routing system
   from Jake Van Clief's video "Stop Building AI Agents. Use This Folder System Instead".
   Start here to understand why the repo is shaped the way it is.
+- `lessons/2026-05-26-figma-mcp-design-pipeline/` — the Dribbble → Figma → MCP → Claude
+  Code pipeline for design-to-code, plus its companion refactor playbook for applying
+  the same pipeline to an existing "slop" codebase without breaking business logic.
 
 ## Workspaces
 
