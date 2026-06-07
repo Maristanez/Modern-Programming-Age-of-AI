@@ -44,6 +44,7 @@ This repo dogfoods the three-layer routing system from Lesson 1:
 |------|--------|--------|
 | 2026-05-13 | [Folder System Architecture](./lessons/2026-05-13-folder-system-architecture/README.md) | Jake Van Clief — "Stop Building AI Agents. Use This Folder System Instead" |
 | 2026-05-26 | [Design-to-Code Pipelines (Figma MCP + Claude Design)](./lessons/ui-ux/2026-05-26-figma-mcp-design-pipeline/README.md) | Companion docs — *Design-to-Code Pipeline*, *Refactoring a "Slop" Codebase with the Figma MCP*, and *The Claude Design Pipeline* |
+| 2026-06-07 | [GitNexus vs. LLM Wiki (code intelligence vs. agent memory)](./lessons/2026-06-07-gitnexus-vs-llm-wiki/README.md) | Comparison notes — GitNexus + Karpathy-style "LLM Wiki" |
 
 ## Adding a new lesson
 

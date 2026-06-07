@@ -30,6 +30,10 @@ and can be moved/referenced without a backend.
   the Dribbble → Figma → MCP → Claude Code path, the native claude.ai/design →
   Handoff path, and the brownfield refactor discipline that applies to both when
   redesigning an existing "slop" codebase without breaking business logic.
+- `lessons/2026-06-07-gitnexus-vs-llm-wiki/` — two kinds of "external brain" for AI
+  agents: GitNexus (a code-intelligence knowledge graph for structural/blast-radius
+  queries) vs. a Karpathy-style LLM Wiki (a read/write Markdown memory for compounding
+  research across sessions). Not competitors — when to pick each, and how they compose.
 
 Lessons can be grouped under category subfolders (e.g. `lessons/ui-ux/`) when a
 theme accumulates enough material; uncategorized lessons live directly under
